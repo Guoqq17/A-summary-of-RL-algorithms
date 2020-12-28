@@ -16,3 +16,4 @@ v_{\pi}(s) &= \mathbb{E}_{\pi}[G_t | S_t = s]\\
 & =\sum_{a} \pi(a|s) \sum_{s^{\prime}, r} p(s^{\prime}, r | s, a) [r +\gamma v_{\pi}(s^{\prime})]\\
 \end{aligned}
 $$
+sf
