@@ -7,4 +7,4 @@ This section follows the flow of this paper: [Rainbow: Combining Improvements in
 
 ### 1.1 Original deep Q-Networks (DQN)
 
-Let's start from the very beginning, [Mnih et al. (2015)](https://storage.googleapis.com/deepmind-data/assets/papers/DeepMindNature14236Paper.pdf) proposed the Deep Q-Networks (DQN) algorithm at Nature. This will be used as the baseline of this section. A convolutional neural network is used to learn the Q values using experience replay.
+Let's start from the very beginning, [Mnih et al. (2015)](https://storage.googleapis.com/deepmind-data/assets/papers/DeepMindNature14236Paper.pdf) proposed the Deep Q-Networks (DQN) algorithm at Nature. This will be used as the baseline of this section. A convolutional neural network is used to learn the Q values using experience replay. The bellman equation for the state-value function for policy $\pi$ is
