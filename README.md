@@ -5,7 +5,7 @@ In this repo, I will implement some key algorithms in RL that discussed in [my b
 
 ### 1.1 Original Deep Q-Networks (DQN, [Mnih et al. (2015)](https://storage.googleapis.com/deepmind-data/assets/papers/DeepMindNature14236Paper.pdf))
 <div align=center>
-  <img src="images/DQN.png" width="70%" height="70%">
+  <img src="images/DQN.png" width="50%" height="50%">
 </div>
 
 - [Fully connected DQN](main.py)
