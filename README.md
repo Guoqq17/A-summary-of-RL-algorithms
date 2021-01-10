@@ -1,5 +1,5 @@
 # A summary of RL algorithms
-In this repo, I will implement some key algorithms in RL that discussed in [my blog](https://guoqq17.github.io/)
+In this repo, I will implement some key algorithms in RL that discussed in [my blog](https://guoqq17.github.io/tags/Reinforcement-Learning/)
 
 ## 1. Deep Q-Learning
 
