@@ -1,21 +1,23 @@
 """
 The main file to run the algorithms
+Each algorithm is tested with an environment in GYM, e.g., CartPole-v0 is used to test the original DQN
+I will keep improving this file to make it more integrated
+Qiangqiang Guo, Jan 9, 2021
 """
 
 import gym
 from algorithms.DQN import DQN
 
 
-env_name = 'CartPole-v0'
-episode = 10000 # Episode limitation
-max_steps = 300 # Step limitation in an episode
-
 def main():
-  # initialize gym
+    ## DQN
+    # Initialize gym environment
+    env_name = 'CartPole-v0'
+    max_episode = 10000         # maximum episode limitation
+    max_steps = 300             # step limitation in an episode
     env = gym.make(env_name)
 
-    agent = DQN(time_step = 1,
-              s_dim = env.observation_space.shape[0],
+    agent = DQN(s_dim = env.observation_space.shape[0],
               a_dim = env.action_space.n,
               memory_capacity = 5000,
               steps_update_target = 200,
@@ -23,11 +25,11 @@ def main():
               batch_size = 64,
               gamma = 0.9,
               n_hidden_layers = 1,
-              n_hidden_nodes = [128],
+              n_hidden_units = [128],
               act_funcs = ['relu', 'softmax'])
 
     total_reward = 0
-    for n_epi in range(episode):
+    for n_epi in range(max_episode):
         step, done = 0, False
         state = env.reset()
         while not done and step < max_steps:
@@ -38,6 +40,8 @@ def main():
             total_reward += reward
             if agent.pointer >= agent.memory_capacity:
                 agent.learn()
+
+        # print to see the average reward every 200 episodes
         if not n_epi % 200:
             print('-' * 20)
             print('total reward in the %d 200:' %(n_epi // 200))
