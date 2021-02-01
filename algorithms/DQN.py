@@ -13,6 +13,7 @@ from algorithms.networks.q_network import create_q_network
 
 class DQN():
     def __init__(self,
+                type = 'fcn',
                 s_dim = 1,
                 a_dim = 1,
                 memory_capacity = 5000,
@@ -20,9 +21,10 @@ class DQN():
                 epsilon = 0.1,
                 batch_size = 64,
                 gamma = 0.9,
-                n_hidden_layers = 1,
-                n_hidden_units = [128],
-                act_funcs = ['relu', 'softmax']):
+                n_hidden_fcn_layers = 1,
+                n_hidden_fcn_units = [128],
+                act_funcs_fcn = ['relu', 'softmax'],
+                cnn_para = {}):
         '''
         Initialize the DQN agent
         s_dim: dimension of the state space
@@ -32,10 +34,11 @@ class DQN():
         epsilon: the greedy action parameter
         batch_size: batch size
         gamma: discount parameter to calculate the expected q value
-        n_hidden_layers: number of hidden layers (hidden layers only, e.g., for a 4*128*64*2 network, hidden layers will be 2)
-        n_hidden_units: number of unit for each hidden layer, len(n_hidden_units) should be equal to n_hidden_layers
-        act_funcs: activation functions for each layers (except the input layer, includes the output layer), len(act_funcs) == n_hidden_layers + 1
+        n_hidden_fcn_layers: number of hidden layers (hidden layers only, e.g., for a 4*128*64*2 network, hidden layers will be 2)
+        n_hidden_fcn_units: number of unit for each hidden layer, len(n_hidden_fcn_units) should be equal to n_hidden_fcn_layers
+        act_funcs_fcn: activation functions for each layers (except the input layer, includes the output layer), len(act_funcs_fcn) == n_hidden_fcn_layers + 1
         '''
+        self.type = type
         self.s_dim = s_dim
         self.a_dim = a_dim
         self.memory_capacity = memory_capacity
@@ -43,9 +46,10 @@ class DQN():
         self.epsilon = epsilon
         self.batch_size = batch_size
         self.gamma = gamma
-        self.n_hidden_units = n_hidden_units
-        self.n_hidden_layers = n_hidden_layers
-        self.act_funcs = act_funcs
+        self.n_hidden_fcn_units = n_hidden_fcn_units
+        self.n_hidden_fcn_layers = n_hidden_fcn_layers
+        self.act_funcs_fcn = act_funcs_fcn
+        self.cnn_para = cnn_para
 
         self.pointer = 0
         self.memory = np.zeros((self.memory_capacity, s_dim * 2 + 1 + 1), dtype=np.float32)
@@ -53,14 +57,19 @@ class DQN():
         para = collections.defaultdict()
         para['s_dim'] = self.s_dim
         para['a_dim'] = self.a_dim
-        para['n_hidden_layers'] = self.n_hidden_layers
-        para['n_hidden_units'] = self.n_hidden_units
-        para['act_funcs'] = self.act_funcs
+        para['n_hidden_fcn_layers'] = self.n_hidden_fcn_layers
+        para['n_hidden_fcn_units'] = self.n_hidden_fcn_units
+        para['act_funcs_fcn'] = self.act_funcs_fcn
+        para['cnn_para'] = self.cnn_para
 
-        self.q_network = create_q_network('q_fcn', para, 'agent')
+        if self.type == 'fcn':
+            self.q_network = create_q_network('q_fcn', para, 'agent')
+            self.q_network_target = create_q_network('q_fcn', para, 'target')
+        elif self.type == 'cnn':
+            self.q_network = create_q_network('q_cnn', para, 'agent')
+            self.q_network_target = create_q_network('q_cnn', para, 'target')
+
         self.q_network.train()
-
-        self.q_network_target = create_q_network('q_fcn', para, 'target')
         self.copy_para(self.q_network, self.q_network_target)
         self.q_network_target.eval()
 
